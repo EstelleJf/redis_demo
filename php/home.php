@@ -1,0 +1,40 @@
+<?php
+include './lib.php';
+include './header.php';
+$user = islogin();
+if($user == false){
+    header('Location:./index.php');
+    exit;
+}
+
+$r = rescont();
+$following = $r->sCard("following:".$user['userid']);
+$follower = $r->sCard("follower:".$user['userid']);
+
+$r->lTrim('recivepost:'.$user['userid'],0,99);
+$all_posts = $r->sort('recivepost:'.$user['userid'],array('sort'=>'desc','get'=>'post:postid:*:content'));
+
+?>
+    <div id="postform">
+        <form method="POST" action="post.php">
+            <?=$user['username']?>, 有啥感想?
+            <br>
+            <table>
+                <tr><td><textarea cols="70" rows="3" name="content"></textarea></td></tr>
+                <tr><td align="right"><input type="submit" name="doit" value="Update"></td></tr>
+            </table>
+        </form>
+        <div id="homeinfobox">
+            <?=$follower ?> 粉丝<br>
+            <?=$following ?> 关注<br>
+        </div>
+    </div>
+<?php  foreach($all_posts as $post){ ?>
+    <div class="post">
+        <a class="username" href="profile.php?u=test">test</a> <?=$post ?>t<br>
+        <i>11 分钟前 通过 web发布</i>
+    </div>
+<?php } ?>
+<?php
+include './footer.php';
+?>
