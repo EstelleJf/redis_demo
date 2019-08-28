@@ -12,7 +12,13 @@ $following = $r->sCard("following:".$user['userid']);
 $follower = $r->sCard("follower:".$user['userid']);
 
 $r->lTrim('recivepost:'.$user['userid'],0,99);
-$all_posts = $r->sort('recivepost:'.$user['userid'],array('sort'=>'desc','get'=>'post:postid:*:content'));
+//$all_posts_content = $r->sort('recivepost:'.$user['userid'],array('sort'=>'desc','get'=>'post:postid:*:content'));
+$all_posts = $r->sort('recivepost:'.$user['userid'],array('sort'=>'desc'));
+foreach($all_posts as $k=>$p){
+    $info = $r->hmget('post:postid:'.$p,array('userid','username','time','content'));
+    $post_arr[$k] = $info;
+    $post_arr[$k]['h'] = format_time($info['time']);
+}
 
 ?>
     <div id="postform">
@@ -29,10 +35,10 @@ $all_posts = $r->sort('recivepost:'.$user['userid'],array('sort'=>'desc','get'=>
             <?=$following ?> 关注<br>
         </div>
     </div>
-<?php  foreach($all_posts as $post){ ?>
+<?php  foreach($post_arr as $post){ ?>
     <div class="post">
-        <a class="username" href="profile.php?u=test">test</a> <?=$post ?>t<br>
-        <i>11 分钟前 通过 web发布</i>
+        <a class="username" href="profile.php?u=test"><?=$post['username']?></a> <?=$post['content'] ?><br>
+        <i><?=$post['h'] ?>  通过 web发布</i>
     </div>
 <?php } ?>
 <?php

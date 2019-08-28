@@ -29,5 +29,11 @@ if($realpass != $password){
 }
 setcookie("un",$username);
 setcookie('ud',$userid);
+$strrand = redom_str();
+$r->set("user:userid:".$userid.":salt",$strrand);
+
+setcookie('salt',$strrand);
+
+
 header('Location:./home.php');
 include ('./footer.php');

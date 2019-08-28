@@ -12,13 +12,19 @@ $cur_uid = $r->get("user:username:$uname:userid");
 if(!$cur_uid){
     error("非法用户");
 }
+$isself = 0;
+if($uname == $user['username']){
+    $isself = 1;
+}
 $ism = $r->sIsMember("following:".$user['userid'],$cur_uid);
 $isf = ($ism?0:1);
 
+
 ?>
     <h2 class="username"><?=$uname ?></h2>
-    <a href="follow.php?uid=<?=$cur_uid?>&f=<?=$isf?>" class="button"><?=($ism==false?"关注ta":"取消关注")?></a>
-
+    <?php if(!$isself){ ?>
+        <a href="follow.php?uid=<?=$cur_uid?>&f=<?=$isf?>" class="button"><?=($ism==false?"关注ta":"取消关注")?></a>
+    <?php } ?>
     <div class="post">
         <a class="username" href="profile.php?u=test">test</a>
         world<br>

@@ -19,11 +19,7 @@ if(trim($content) =="" ){
 
 $r = rescont();
 $postid = $r->incr("global:postid");
-$r->set('post:postid:'.$postid.':userid',$user['userid']);
-$r->set('post:postid:'.$postid.':time',time());
-$r->set('post:postid:'.$postid.':content',$content);
-
-
+$r->hmset('post:postid:'.$postid,array('userid'=>$user['userid'],'username'=>$user['username'],'time'=>time(),'content'=>$content));
 
 //推给粉丝 和自己
 $fans = $r->sMembers("follower:".$user['userid']);

@@ -1,4 +1,5 @@
 <?php
+error_reporting(1);
 include './lib.php';
 include './header.php';
 $user = islogin();

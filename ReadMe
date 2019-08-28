@@ -1,0 +1,20 @@
+设计user表  --- 对应的key规则
+
+注册用户user
+incr global:userid
+set user:userid:1:username zhangsan
+set user:userid:1:password 111111
+
+set user:username:zhansan:userid  1
+
+发微博：post
+post:postid:2:time timestamp
+post:postid:2:userid 1
+post:postid:2:content  'this is my post'
+
+incr global:postid 
+post:postid:$postid:time timestamp
+post:postid:$postid:userid $userid
+post:postid:$postid:content  $content
+
+post:userid:$userid:postid  $postid
